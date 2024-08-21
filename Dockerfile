@@ -10,9 +10,9 @@ WORKDIR $ROS_WS/src
 
 # Copy your ROS2 package into the workspace
 COPY ./src/perception $ROS_WS/src/perception
-COPY ./src/navigation $ROS_WS/src/navigation
-COPY ./src/control $ROS_WS/src/control
-COPY ./src/my_launch_package $ROS_WS/src/my_launch_package
+#COPY ./src/navigation $ROS_WS/src/navigation
+#COPY ./src/control $ROS_WS/src/control
+#COPY ./src/my_launch_package $ROS_WS/src/my_launch_package
 
 # Go back to workspace root
 WORKDIR $ROS_WS
@@ -22,11 +22,13 @@ COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 
-# Build the workspace
-RUN . /opt/ros/galactic/setup.sh && colcon build
+# Build the workspace 
+#update it to only build the perception package 
+RUN . /opt/ros/galactic/setup.sh && \
+colcon build --packages-select perception
 
 # Source the workspace and setup entrypoint
 RUN echo "source /ros2_ws/install/setup.bash" >> /root/.bashrc
 
 # Set the default command to run when the container starts
-CMD ["bash", "-c", "source /ros2_ws/install/setup.bash && ros2 launch my_launch_package launch_packages.py"]
+CMD ["bash", "-c", "source /ros2_ws/install/setup.bash && ros2 launch perception launch_perception_node.launch.py"]
