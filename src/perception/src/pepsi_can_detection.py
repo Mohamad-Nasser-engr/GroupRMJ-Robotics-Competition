@@ -17,7 +17,7 @@ class PepsiCanDetector(Node):
         # Initialize the InferenceHTTPClient
         self.client = InferenceHTTPClient(
             api_url="https://detect.roboflow.com",
-            api_key="bwZdRPnoYYRFnrcscwxp"  # Replace with your actual API key
+            api_key="bwZdRPnoYYRFnrcscwxp"  
         )
         self.model_id = "pepsi-can-detection-krjyn/1"
 
