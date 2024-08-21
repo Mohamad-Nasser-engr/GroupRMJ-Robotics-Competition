@@ -11,7 +11,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
-find_package(OpenCV 2 REQUIRED)  
+find_package(OpenCV 4 REQUIRED)  
 find_package(ament_cmake_python REQUIRED)  # For Python support
 
 # Add C++ executable
@@ -24,7 +24,7 @@ ament_target_dependencies(
   initNode
   rclcpp
   cv_bridge
-  OpenCV
+  OpenCV 
 )
 
 install(TARGETS initNode
