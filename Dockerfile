@@ -8,6 +8,7 @@ ENV ROS_DOMAIN_ID=56
 # Create a workspace directory
 WORKDIR $ROS_WS/src
 
+
 # Copy your ROS2 package into the workspace
 COPY ./src/perception $ROS_WS/src/perception
 #COPY ./src/navigation $ROS_WS/src/navigation
@@ -17,6 +18,10 @@ COPY ./src/perception $ROS_WS/src/perception
 # Go back to workspace root
 WORKDIR $ROS_WS
 
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip
+    
 # Copy requirements.txt and install Python dependencies
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
