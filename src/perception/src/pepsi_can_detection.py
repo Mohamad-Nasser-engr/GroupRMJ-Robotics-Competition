@@ -32,7 +32,7 @@ class PepsiCanDetector(Node):
 
     def laser_callback(self, msg):
         # Check if an object is detected in front of the robot
-        if min(msg.ranges) < 1.0:  # Example threshold, adjust as needed
+        if min(msg.ranges) < 1.0:  
             logger.info("Object detected, analyzing...")
             self.can_detected = True
         else:
