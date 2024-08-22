@@ -30,18 +30,8 @@ class PepsiCanDetector(Node):
 
         logger.info('PepsiCanDetector node has been started.')
 
-    def laser_callback(self, msg):
-        # Check if an object is detected in front of the robot
-        if min(msg.ranges) < 1.0:  
-            logger.info("Object detected, analyzing...")
-            self.can_detected = True
-        else:
-            logger.info("No object detected, searching...")
-            self.can_detected = False
 
     def image_callback(self, msg):
-        if not self.can_detected:
-            return
 
         logger.debug('Received image message.')
         # Convert ROS Image message to OpenCV image
@@ -71,6 +61,7 @@ class PepsiCanDetector(Node):
             if detection['class'] == 'pepsi_can':
                 logger.info("Pepsi can detected!")
                 detected = True
+                
                 break
 
         if not detected:

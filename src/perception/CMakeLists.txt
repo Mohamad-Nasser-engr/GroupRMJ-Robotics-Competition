@@ -32,8 +32,8 @@ install(TARGETS initNode
 
 # Install Python executables
 install(PROGRAMS
-  nodes/qr_code_detector.py
-  nodes/pepsi_can_detector.py
+  nodes/QRcode_detection.py
+  nodes/pepsi_can_detecton.py
   DESTINATION lib/${PROJECT_NAME}/nodes
 )
 
