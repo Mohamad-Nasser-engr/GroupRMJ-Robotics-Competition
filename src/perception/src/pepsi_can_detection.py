@@ -1,13 +1,14 @@
 import rclpy
 from rclpy.node import Node
 import cv2
-from sensor_msgs.msg import Image, LaserScan
+from sensor_msgs.msg import Image
+from geometry_msgs.msg import Point
+from std_msgs.msg import Bool
 from cv_bridge import CvBridge
 from inference_sdk import InferenceHTTPClient
-import numpy as np
 import logging
 
-# Set up logging
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('pepsi_can_detector')
 
@@ -15,8 +16,13 @@ class PepsiCanDetector(Node):
     def __init__(self):
         super().__init__('pepsi_can_detector')
         self.bridge = CvBridge()
+
+        # Subscribers
         self.image_sub = self.create_subscription(Image, '/camera/image_raw', self.image_callback, 10)
-        self.laser_sub = self.create_subscription(LaserScan, '/scan', self.laser_callback, 10)
+
+        # Publishers
+        self.centroid_pub = self.create_publisher(Point, '/pepsi_can_centroid', 10)
+        self.detection_pub = self.create_publisher(Bool, '/pepsi_can_detection', 10)
 
         # Initialize the InferenceHTTPClient
         self.client = InferenceHTTPClient(
@@ -25,20 +31,15 @@ class PepsiCanDetector(Node):
         )
         self.model_id = "pepsi-can-detection-krjyn/1"
 
-        # Set initial state
-        self.can_detected = False
-
         logger.info('PepsiCanDetector node has been started.')
 
-
     def image_callback(self, msg):
-
         logger.debug('Received image message.')
         # Convert ROS Image message to OpenCV image
         try:
             frame = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
             logger.debug('Converted image to OpenCV format.')
-            
+
             # Convert image to JPEG format
             _, img_encoded = cv2.imencode('.jpg', frame)
             img_bytes = img_encoded.tobytes()
@@ -46,32 +47,49 @@ class PepsiCanDetector(Node):
             # Use the inference client to perform detection
             try:
                 result = self.client.infer(img_bytes, model_id=self.model_id)
-                self.process_detections(result)
+                self.process_detections(result, frame)
             except Exception as e:
                 logger.error(f"Error communicating with inference server: {e}")
 
         except Exception as e:
             logger.error(f'Failed to convert image: {e}')
 
-    def process_detections(self, detections):
+    def process_detections(self, detections, frame):
         logger.debug('Processing detections.')
-        # Check if Pepsi can is detected
+        # Check if Pepsi can is detected and publish centroid and boolean
         detected = False
         for detection in detections.get('predictions', []):
             if detection['class'] == 'pepsi_can':
                 logger.info("Pepsi can detected!")
                 detected = True
-                
+
+                # Calculate the centroid of the detected Pepsi can
+                x_min = detection['x'] - detection['width'] / 2
+                y_min = detection['y'] - detection['height'] / 2
+                x_max = detection['x'] + detection['width'] / 2
+                y_max = detection['y'] + detection['height'] / 2
+
+                centroid_x = (x_min + x_max) / 2
+                centroid_y = (y_min + y_max) / 2
+                self.publish_centroid(centroid_x, centroid_y)
                 break
 
-        if not detected:
-            logger.info("No Pepsi can detected.")
-            # Optionally, handle case when no can is detected
-            self.handle_no_detection()
+        
+        self.publish_detection_status(detected)
 
-    def handle_no_detection(self):
-        # Implement actions to take when no Pepsi can is detected
-        logger.info('No action needed as Pepsi can is not detected.')
+    def publish_centroid(self, x, y):
+        centroid = Point()
+        centroid.x = x
+        centroid.y = y
+        centroid.z = 0.0  
+        self.centroid_pub.publish(centroid)
+        logger.info(f"Published Pepsi can centroid: ({x}, {y})")
+
+    def publish_detection_status(self, detected):
+        detection_status = Bool()
+        detection_status.data = detected
+        self.detection_pub.publish(detection_status)
+        logger.info(f"Published Pepsi can detection status: {'Detected' if detected else 'Not Detected'}")
 
 def main(args=None):
     rclpy.init(args=args)
@@ -82,4 +100,5 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
 
