@@ -9,7 +9,7 @@ def generate_launch_description():
             name='init_node',
             output='screen',
             parameters=[{
-                # Add any parameters you want to set for the node here
+                
             }]
         ),
         Node(
@@ -18,7 +18,7 @@ def generate_launch_description():
             name='QRcode_detection',
             output='screen',
             parameters=[{
-                # Add any parameters specific to QR code detection here
+                
             }]
         ),
 
@@ -29,7 +29,17 @@ def generate_launch_description():
             name='pepsi_can_detection',
             output='screen',
             parameters=[{
-                # Add any parameters specific to Pepsi can detection here
+                
             }]
         ),
+        Node(
+            package='perception',
+            executable='lightsensordetection.py',
+            name='lightsensordetection',
+            output='screen',
+            parameters=[{
+               
+            }]
+        ),
+        
     ])

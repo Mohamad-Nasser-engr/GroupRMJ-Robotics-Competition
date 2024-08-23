@@ -38,4 +38,4 @@ colcon build --packages-select perception
 RUN echo "source /ros2_ws/install/setup.bash" >> /root/.bashrc
 
 # Set the default command to run when the container starts
-CMD ["bash", "-c", "source /ros2_ws/install/setup.bash && ros2 launch perception launch_perception_node.launch.py"]
+CMD ["bash", "-c", "source /ros2_ws/install/setup.bash && ros2 launch perception perception_launch.py"]

@@ -12,9 +12,11 @@ find_package(rclpy REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV 4 REQUIRED)  
+find_package(geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(ament_cmake_python REQUIRED)  # For Python support
 
-# Add C++ executable
+
 add_executable(initNode src/initNode.cpp)
 target_include_directories(initNode PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -32,9 +34,10 @@ install(TARGETS initNode
 
 # Install Python executables
 install(PROGRAMS
-  nodes/QRcode_detection.py
-  nodes/pepsi_can_detecton.py
-  DESTINATION lib/${PROJECT_NAME}/nodes
+  src/QRcode_detection.py
+  src/pepsi_can_detecton.py
+  src/lightsensordetection.py
+  DESTINATION lib/${PROJECT_NAME}/src
 )
 
 # Install other files (e.g., launch files)
