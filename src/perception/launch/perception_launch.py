@@ -5,41 +5,31 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='perception',
-            executable='initNode',
-            name='init_node',
-            output='screen',
-            parameters=[{
-                
-            }]
-        ),
-        Node(
-            package='perception',
-            executable='QRcode_detection.py',
+            executable='nodes/QRcode_detection.py',  # Adjusted path for the Python node
             name='QRcode_detection',
             output='screen',
             parameters=[{
-                
+                # Add parameters here if needed
             }]
         ),
-
-        # Launch the Pepsi can detector Python node
         Node(
             package='perception',
-            executable='pepsi_can_detection.py',
+            executable='nodes/pepsi_can_detection.py',  # Adjusted path for the Python node
             name='pepsi_can_detection',
             output='screen',
             parameters=[{
-                
+                # Add parameters here if needed
             }]
         ),
         Node(
             package='perception',
-            executable='lightsensordetection.py',
+            executable='nodes/lightsensordetection.py',  # Adjusted path for the Python node
             name='lightsensordetection',
             output='screen',
             parameters=[{
-               
+                # Add parameters here if needed
             }]
         ),
-        
     ])
+
+

@@ -16,28 +16,12 @@ find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(ament_cmake_python REQUIRED)  # For Python support
 
-
-add_executable(initNode src/initNode.cpp)
-target_include_directories(initNode PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
-target_compile_features(initNode PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
-ament_target_dependencies(
-  initNode
-  rclcpp
-  cv_bridge
-  OpenCV 
-)
-
-install(TARGETS initNode
-  DESTINATION lib/${PROJECT_NAME})
-
 # Install Python executables
 install(PROGRAMS
   src/QRcode_detection.py
-  src/pepsi_can_detecton.py
+  src/pepsi_can_detection.py
   src/lightsensordetection.py
-  DESTINATION lib/${PROJECT_NAME}/src
+  DESTINATION lib/${PROJECT_NAME}/nodes
 )
 
 # Install other files (e.g., launch files)
