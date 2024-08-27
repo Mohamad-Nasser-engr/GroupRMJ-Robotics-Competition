@@ -13,24 +13,24 @@ def generate_launch_description():
                 'launch',
                 'perception_launch.py'))
     )
-    navigation_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory('navigation'),
-                'launch',
-                'navigation_launch.py'))
-    )
+    #navigation_launch = IncludeLaunchDescription(
+        #PythonLaunchDescriptionSource(
+            #os.path.join(
+                #get_package_share_directory('navigation'),
+                #'launch',
+                #'navigation_launch.py'))
+    #)
 
-    control_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory('control'),
-                'launch',
-                'control_launch.py'))
-    )
+    #control_launch = IncludeLaunchDescription(
+        #PythonLaunchDescriptionSource(
+            #os.path.join(
+                #get_package_share_directory('control'),
+                #'launch',
+                #'control_launch.py'))
+    #)
 
     return LaunchDescription([
         perception_launch,
-        navigation_launch,
+        #navigation_launch,
         # control_launch
     ])

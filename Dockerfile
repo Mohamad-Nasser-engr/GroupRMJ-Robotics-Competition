@@ -4,8 +4,8 @@ FROM ros_galactic_with_deps
 # Set environment variables
 ENV ROS_WS=/ros2_ws
 ENV ROS_DOMAIN_ID=56
-ENV CMAKE_PREFIX_PATH=/opt/ros/galactic:$CMAKE_PREFIX_PATH
-
+# Define CMAKE_PREFIX_PATH directly
+ENV CMAKE_PREFIX_PATH="/opt/ros/galactic"
 # Create a workspace directory
 WORKDIR $ROS_WS/src
 
